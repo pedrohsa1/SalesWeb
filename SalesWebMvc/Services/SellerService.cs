@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Services.Exceptions;
 
 namespace SalesWebMvc.Services
 {
@@ -42,6 +43,30 @@ namespace SalesWebMvc.Services
             _context.SaveChanges();
         }
 
+        public void Update(Seller obj)
+        {
+            //Any pergunta se existe algum registro no bd
+            if (!_context.Seller.Any(x => x.Id == obj.Id))
+            {
+                throw new NotFoundException("Id not found");
+            }
+
+            /*Essa estrutura é para agregar essa exceção na camada de Serviço,
+             desta forma dividimos bem as camadas e responsabilidades. Assim as 
+            O controlador conversa com a camada de serviço e exceções do nível 
+            de acesso a dados são capturados pelo serviço e relançadas em forma 
+            de exceções de serviço para o controlador*/
+            try
+            {
+
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+            _context.Update(obj);
+            _context.SaveChanges();
+        }
 
     }
 }
