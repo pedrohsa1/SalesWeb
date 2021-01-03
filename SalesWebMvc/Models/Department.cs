@@ -27,7 +27,7 @@ namespace SalesWebMvc.Models
         }
 
         //Total de vendas por Departamento dentro desse intervalo de data
-        public double TotalSeller(DateTime initial, DateTime final)
+        public double TotalSales(DateTime initial, DateTime final)
         {
             return Sellers.Sum(seller => seller.TotalSales(initial, final));
         }
